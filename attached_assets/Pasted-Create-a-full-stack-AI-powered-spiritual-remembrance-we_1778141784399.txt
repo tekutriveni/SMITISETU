@@ -1,0 +1,196 @@
+Create a full-stack AI-powered spiritual remembrance web application called “SmritiSetu – Ancestor Reminder App” using React + Node.js + Express + PostgreSQL with a modern responsive UI and emotional/spiritual design theme.
+The purpose of this application is to help users remember the death anniversaries (Vardhanti/Taddinam/Smarana Dinam) of their ancestors or family members using:
+English Calendar Date
+Telugu Panchangam Tithi
+Nakshatram
+Masam
+Paksham
+Yearly repeating reminders
+The app should automatically notify users before important remembrance dates every year.
+CORE FEATURES
+User Authentication
+Register/Login
+JWT Authentication
+Secure password hashing
+Forgot password
+Logout functionality
+DASHBOARD
+Dashboard should display:
+Upcoming remembrance events
+Today's reminders
+Calendar view
+Countdown timer
+Recent notifications
+Family ancestor cards with photos
+Spiritual quotes
+Example: “Reminder: Your grandfather Sri Ramulu garu Vardhanti is coming in 25 days.”
+ADD ANCESTOR DETAILS
+Fields Required:
+Basic Details:
+Full Name
+Relationship
+Gender
+Photo Upload
+Date of Birth (optional)
+Date of Death
+Place
+Spiritual/Panchangam Details:
+Tithi
+Nakshatram
+Telugu Masam
+Paksham (Shukla/Krishna)
+Samvatsaram (optional)
+Telugu Year Name
+Time of Death (optional)
+Family Details:
+Family Side (Maternal/Paternal)
+Gotram (optional)
+Remembrance Details:
+Reminder before:
+1 month
+15 days
+7 days
+1 day
+Ritual Notes
+Important traditions to follow
+Favorite memories
+Food offerings/Prasadam details
+SMART REMINDER ENGINE
+Automatically:
+Calculate yearly remembrance dates
+Support both English date reminders and Panchangam-based reminders
+Send alerts before the selected reminder period
+Reminder message examples:
+“Your ancestor Lakshmaiah garu Vardhanti is on June 15.”
+“Ashada Bahula Amavasya Tithi remembrance is approaching.”
+“Nakshatram reminder: Rohini Nakshatram ceremony tomorrow.”
+Use:
+node-cron scheduler
+date-fns or moment.js
+PANCHANGAM INTEGRATION
+Add Panchangam support:
+Tithi calculations
+Nakshatram calculations
+Telugu calendar support
+Hindu spiritual date matching
+Use API or custom Panchangam logic.
+Display:
+Today's Tithi
+Today's Nakshatram
+Auspicious remembrance timings
+NOTIFICATIONS
+Support:
+Email notifications
+WhatsApp notifications using Twilio
+SMS notifications
+In-app notifications
+Optional:
+Voice reminders
+Telegram bot alerts
+MULTI-LANGUAGE SUPPORT
+Languages:
+English
+Telugu
+Hindi
+Add easy language switch option.
+FAMILY TREE FEATURE
+Create visual family tree:
+Ancestor hierarchy
+Relationships visualization
+Family generation mapping
+CALENDAR & TIMELINE
+Features:
+Monthly remembrance calendar
+Panchangam calendar
+Timeline of ancestors
+Highlight upcoming dates
+Filter by relationship or family side
+AI FEATURES
+AI-generated:
+Spiritual remembrance quotes
+Ritual suggestions
+Personalized memory messages
+Traditional ceremony guidance
+Condolence/remembrance text generation
+DATABASE TABLES
+Tables:
+users
+ancestors
+reminders
+panchangam_details
+notifications
+family_tree
+UI/UX DESIGN
+Requirements:
+Elegant spiritual UI
+Temple-inspired soft colors
+Smooth animations
+Tailwind CSS
+Mobile responsive
+Dark/light mode
+Dashboard cards
+Emotional design
+Use:
+React
+Tailwind CSS
+Framer Motion
+Chart.js
+EXTRA FEATURES
+Upload old ancestor photos
+Audio memories
+PDF export
+CSV backup
+Cloud backup support
+Family sharing access
+Anniversary analytics charts
+Offline support (PWA)
+REQUIRED PAGES
+Pages:
+Home
+Login/Register
+Dashboard
+Add Ancestor
+Panchangam Calendar
+Family Tree
+Notification History
+Settings/Profile
+Memory Gallery
+TECH STACK
+Frontend:
+React
+Tailwind CSS
+Axios
+React Router
+Backend:
+Node.js
+Express.js
+Database:
+PostgreSQL
+Authentication:
+JWT
+Other:
+Multer
+Nodemailer
+Node-cron
+Twilio API
+IMPORTANT DEVELOPMENT REQUIREMENTS
+Generate complete folder structure
+Well-commented beginner-friendly code
+Proper API routes
+Validation and error handling
+Production-ready architecture
+Replit-compatible setup
+Include README.md
+Include installation steps
+Include environment variables example
+Include sample database data
+Include sample screenshots/mockup idea
+Use clean coding practices
+APP NAME IDEAS
+SmritiSetu
+Vamsa Smarana
+Eternal Roots
+PitruBandham
+Shraddha Reminder
+Ancestor Connect
+Generate the COMPLETE WORKING APPLICATION with all frontend, backend, database, scheduler, reminder logic, Panchangam integration, and responsive UI step-by-step.

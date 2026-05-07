@@ -3,20 +3,36 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: SmritiSetu - Ancestor Remembrance App API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: auth
+    description: Authentication operations
+  - name: users
+    description: User profile operations
+  - name: ancestors
+    description: Ancestor management
+  - name: reminders
+    description: Reminder operations
+  - name: panchangam
+    description: Panchangam/Hindu calendar
+  - name: notifications
+    description: Notification history
+  - name: dashboard
+    description: Dashboard summary data
+  - name: ai
+    description: AI-generated content
+
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -24,7 +40,566 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  # AUTH
+  /auth/register:
+    post:
+      operationId: register
+      tags: [auth]
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterBody"
+      responses:
+        "201":
+          description: User registered
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /auth/login:
+    post:
+      operationId: login
+      tags: [auth]
+      summary: Login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginBody"
+      responses:
+        "200":
+          description: Logged in
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "401":
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /auth/me:
+    get:
+      operationId: getMe
+      tags: [auth]
+      summary: Get current user
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Current user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /auth/logout:
+    post:
+      operationId: logout
+      tags: [auth]
+      summary: Logout
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Logged out
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+
+  # USERS
+  /users/profile:
+    patch:
+      operationId: updateProfile
+      tags: [users]
+      summary: Update user profile
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateProfileBody"
+      responses:
+        "200":
+          description: Profile updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+
+  # ANCESTORS
+  /ancestors:
+    get:
+      operationId: listAncestors
+      tags: [ancestors]
+      summary: List all ancestors for the authenticated user
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: familySide
+          in: query
+          schema:
+            type: ["string", "null"]
+            enum: [Maternal, Paternal, null]
+        - name: search
+          in: query
+          schema:
+            type: ["string", "null"]
+      responses:
+        "200":
+          description: List of ancestors
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Ancestor"
+
+    post:
+      operationId: createAncestor
+      tags: [ancestors]
+      summary: Add a new ancestor
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateAncestorBody"
+      responses:
+        "201":
+          description: Ancestor created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ancestor"
+
+  /ancestors/{id}:
+    get:
+      operationId: getAncestor
+      tags: [ancestors]
+      summary: Get a specific ancestor
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Ancestor details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ancestor"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+    patch:
+      operationId: updateAncestor
+      tags: [ancestors]
+      summary: Update ancestor details
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateAncestorBody"
+      responses:
+        "200":
+          description: Updated ancestor
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ancestor"
+
+    delete:
+      operationId: deleteAncestor
+      tags: [ancestors]
+      summary: Delete an ancestor
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  # REMINDERS
+  /reminders:
+    get:
+      operationId: listReminders
+      tags: [reminders]
+      summary: List reminders for the user
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: upcoming
+          in: query
+          schema:
+            type: ["string", "null"]
+      responses:
+        "200":
+          description: List of reminders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Reminder"
+
+  /reminders/today:
+    get:
+      operationId: getTodayReminders
+      tags: [reminders]
+      summary: Get reminders due today
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Today's reminders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Reminder"
+
+  /reminders/{id}/acknowledge:
+    post:
+      operationId: acknowledgeReminder
+      tags: [reminders]
+      summary: Acknowledge (dismiss) a reminder
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Acknowledged
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Reminder"
+
+  # PANCHANGAM
+  /panchangam/today:
+    get:
+      operationId: getPanchangamToday
+      tags: [panchangam]
+      summary: Get today's Panchangam details
+      responses:
+        "200":
+          description: Today's Panchangam
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PanchangamDay"
+
+  /panchangam/date:
+    get:
+      operationId: getPanchangamForDate
+      tags: [panchangam]
+      summary: Get Panchangam for a specific date
+      parameters:
+        - name: date
+          in: query
+          required: true
+          schema:
+            type: string
+            description: Date in YYYY-MM-DD format
+      responses:
+        "200":
+          description: Panchangam for that date
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PanchangamDay"
+
+  /panchangam/tithis:
+    get:
+      operationId: listTithis
+      tags: [panchangam]
+      summary: List all Tithis
+      responses:
+        "200":
+          description: Tithis list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+
+  /panchangam/nakshatrams:
+    get:
+      operationId: listNakshatrams
+      tags: [panchangam]
+      summary: List all Nakshatrams
+      responses:
+        "200":
+          description: Nakshatrams list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+
+  /panchangam/masams:
+    get:
+      operationId: listMasams
+      tags: [panchangam]
+      summary: List all Telugu Masams
+      responses:
+        "200":
+          description: Masams list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+
+  # NOTIFICATIONS
+  /notifications:
+    get:
+      operationId: listNotifications
+      tags: [notifications]
+      summary: List all notifications for the user
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Notifications
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Notification"
+
+  /notifications/unread-count:
+    get:
+      operationId: getUnreadNotificationCount
+      tags: [notifications]
+      summary: Get count of unread notifications
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Unread count
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnreadCountResponse"
+
+  /notifications/{id}/read:
+    post:
+      operationId: markNotificationRead
+      tags: [notifications]
+      summary: Mark a notification as read
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Marked read
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Notification"
+
+  /notifications/mark-all-read:
+    post:
+      operationId: markAllNotificationsRead
+      tags: [notifications]
+      summary: Mark all notifications as read
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: All marked read
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+
+  # DASHBOARD
+  /dashboard/summary:
+    get:
+      operationId: getDashboardSummary
+      tags: [dashboard]
+      summary: Get dashboard summary statistics
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Dashboard summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardSummary"
+
+  /dashboard/upcoming-events:
+    get:
+      operationId: getUpcomingEvents
+      tags: [dashboard]
+      summary: Get upcoming remembrance events (next 90 days)
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Upcoming events
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UpcomingEvent"
+
+  /dashboard/calendar:
+    get:
+      operationId: getCalendarEvents
+      tags: [dashboard]
+      summary: Get all events for a given month
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: year
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: month
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Calendar events for the month
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CalendarEvent"
+
+  # AI
+  /ai/spiritual-quote:
+    get:
+      operationId: getSpiritualQuote
+      tags: [ai]
+      summary: Get an AI-generated spiritual quote
+      responses:
+        "200":
+          description: Spiritual quote
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SpiritualQuote"
+
+  /ai/remembrance-message:
+    post:
+      operationId: generateRemembranceMessage
+      tags: [ai]
+      summary: Generate a personalized remembrance message for an ancestor
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GenerateMessageBody"
+      responses:
+        "200":
+          description: Generated message
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GeneratedMessage"
+
+  /ai/ritual-suggestions:
+    post:
+      operationId: getRitualSuggestions
+      tags: [ai]
+      summary: Get AI-suggested rituals for an ancestor's remembrance
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RitualSuggestionsBody"
+      responses:
+        "200":
+          description: Ritual suggestions
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RitualSuggestions"
+
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
   schemas:
     HealthStatus:
       type: object
@@ -34,3 +609,517 @@ components:
       required:
         - status
 
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+        - error
+
+    MessageResponse:
+      type: object
+      properties:
+        message:
+          type: string
+      required:
+        - message
+
+    # AUTH
+    RegisterBody:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        language:
+          type: string
+          enum: [en, te, hi]
+          default: en
+      required:
+        - name
+        - email
+        - password
+
+    LoginBody:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      required:
+        - email
+        - password
+
+    AuthResponse:
+      type: object
+      properties:
+        token:
+          type: string
+        user:
+          $ref: "#/components/schemas/User"
+      required:
+        - token
+        - user
+
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+        language:
+          type: string
+        photoUrl:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+      required:
+        - id
+        - name
+        - email
+        - language
+        - createdAt
+
+    UpdateProfileBody:
+      type: object
+      properties:
+        name:
+          type: ["string", "null"]
+        language:
+          type: ["string", "null"]
+        photoUrl:
+          type: ["string", "null"]
+
+    # ANCESTORS
+    Ancestor:
+      type: object
+      properties:
+        id:
+          type: integer
+        userId:
+          type: integer
+        fullName:
+          type: string
+        relationship:
+          type: string
+        gender:
+          type: string
+          enum: [Male, Female, Other]
+        photoUrl:
+          type: ["string", "null"]
+        dateOfBirth:
+          type: ["string", "null"]
+        dateOfDeath:
+          type: string
+        placeOfDeath:
+          type: ["string", "null"]
+        tithi:
+          type: ["string", "null"]
+        nakshatram:
+          type: ["string", "null"]
+        masam:
+          type: ["string", "null"]
+        paksham:
+          type: ["string", "null"]
+          enum: [Shukla, Krishna, null]
+        samvatsaram:
+          type: ["string", "null"]
+        teluguYearName:
+          type: ["string", "null"]
+        timeOfDeath:
+          type: ["string", "null"]
+        familySide:
+          type: ["string", "null"]
+          enum: [Maternal, Paternal, null]
+        gotram:
+          type: ["string", "null"]
+        reminderDaysBefore:
+          type: integer
+          default: 7
+        ritualNotes:
+          type: ["string", "null"]
+        traditions:
+          type: ["string", "null"]
+        favoriteMemories:
+          type: ["string", "null"]
+        prasadamDetails:
+          type: ["string", "null"]
+        daysUntilNext:
+          type: ["integer", "null"]
+        createdAt:
+          type: string
+      required:
+        - id
+        - userId
+        - fullName
+        - relationship
+        - gender
+        - dateOfDeath
+        - reminderDaysBefore
+        - createdAt
+
+    CreateAncestorBody:
+      type: object
+      properties:
+        fullName:
+          type: string
+        relationship:
+          type: string
+        gender:
+          type: string
+          enum: [Male, Female, Other]
+        photoUrl:
+          type: ["string", "null"]
+        dateOfBirth:
+          type: ["string", "null"]
+        dateOfDeath:
+          type: string
+        placeOfDeath:
+          type: ["string", "null"]
+        tithi:
+          type: ["string", "null"]
+        nakshatram:
+          type: ["string", "null"]
+        masam:
+          type: ["string", "null"]
+        paksham:
+          type: ["string", "null"]
+        samvatsaram:
+          type: ["string", "null"]
+        teluguYearName:
+          type: ["string", "null"]
+        timeOfDeath:
+          type: ["string", "null"]
+        familySide:
+          type: ["string", "null"]
+        gotram:
+          type: ["string", "null"]
+        reminderDaysBefore:
+          type: integer
+          default: 7
+        ritualNotes:
+          type: ["string", "null"]
+        traditions:
+          type: ["string", "null"]
+        favoriteMemories:
+          type: ["string", "null"]
+        prasadamDetails:
+          type: ["string", "null"]
+      required:
+        - fullName
+        - relationship
+        - gender
+        - dateOfDeath
+
+    UpdateAncestorBody:
+      type: object
+      properties:
+        fullName:
+          type: ["string", "null"]
+        relationship:
+          type: ["string", "null"]
+        gender:
+          type: ["string", "null"]
+        photoUrl:
+          type: ["string", "null"]
+        dateOfBirth:
+          type: ["string", "null"]
+        dateOfDeath:
+          type: ["string", "null"]
+        placeOfDeath:
+          type: ["string", "null"]
+        tithi:
+          type: ["string", "null"]
+        nakshatram:
+          type: ["string", "null"]
+        masam:
+          type: ["string", "null"]
+        paksham:
+          type: ["string", "null"]
+        samvatsaram:
+          type: ["string", "null"]
+        teluguYearName:
+          type: ["string", "null"]
+        timeOfDeath:
+          type: ["string", "null"]
+        familySide:
+          type: ["string", "null"]
+        gotram:
+          type: ["string", "null"]
+        reminderDaysBefore:
+          type: ["integer", "null"]
+        ritualNotes:
+          type: ["string", "null"]
+        traditions:
+          type: ["string", "null"]
+        favoriteMemories:
+          type: ["string", "null"]
+        prasadamDetails:
+          type: ["string", "null"]
+
+    # REMINDERS
+    Reminder:
+      type: object
+      properties:
+        id:
+          type: integer
+        userId:
+          type: integer
+        ancestorId:
+          type: integer
+        ancestorName:
+          type: string
+        relationship:
+          type: string
+        reminderDate:
+          type: string
+        anniversaryDate:
+          type: string
+        daysUntil:
+          type: integer
+        type:
+          type: string
+          enum: [english, panchangam]
+        message:
+          type: string
+        isAcknowledged:
+          type: boolean
+        createdAt:
+          type: string
+      required:
+        - id
+        - userId
+        - ancestorId
+        - ancestorName
+        - relationship
+        - reminderDate
+        - anniversaryDate
+        - daysUntil
+        - type
+        - message
+        - isAcknowledged
+        - createdAt
+
+    # PANCHANGAM
+    PanchangamDay:
+      type: object
+      properties:
+        date:
+          type: string
+        tithi:
+          type: string
+        nakshatram:
+          type: string
+        masam:
+          type: string
+        paksham:
+          type: string
+        samvatsaram:
+          type: string
+        vara:
+          type: string
+        auspiciousTimings:
+          type: array
+          items:
+            type: string
+        inauspiciousTimings:
+          type: array
+          items:
+            type: string
+      required:
+        - date
+        - tithi
+        - nakshatram
+        - masam
+        - paksham
+        - samvatsaram
+        - vara
+        - auspiciousTimings
+        - inauspiciousTimings
+
+    # NOTIFICATIONS
+    Notification:
+      type: object
+      properties:
+        id:
+          type: integer
+        userId:
+          type: integer
+        ancestorId:
+          type: ["integer", "null"]
+        ancestorName:
+          type: ["string", "null"]
+        title:
+          type: string
+        message:
+          type: string
+        type:
+          type: string
+          enum: [reminder, system, panchangam]
+        isRead:
+          type: boolean
+        createdAt:
+          type: string
+      required:
+        - id
+        - userId
+        - title
+        - message
+        - type
+        - isRead
+        - createdAt
+
+    UnreadCountResponse:
+      type: object
+      properties:
+        count:
+          type: integer
+      required:
+        - count
+
+    # DASHBOARD
+    DashboardSummary:
+      type: object
+      properties:
+        totalAncestors:
+          type: integer
+        upcomingThisMonth:
+          type: integer
+        upcomingThisWeek:
+          type: integer
+        todayCount:
+          type: integer
+        maternalCount:
+          type: integer
+        paternalCount:
+          type: integer
+        unreadNotifications:
+          type: integer
+      required:
+        - totalAncestors
+        - upcomingThisMonth
+        - upcomingThisWeek
+        - todayCount
+        - maternalCount
+        - paternalCount
+        - unreadNotifications
+
+    UpcomingEvent:
+      type: object
+      properties:
+        ancestorId:
+          type: integer
+        ancestorName:
+          type: string
+        relationship:
+          type: string
+        photoUrl:
+          type: ["string", "null"]
+        anniversaryDate:
+          type: string
+        daysUntil:
+          type: integer
+        tithi:
+          type: ["string", "null"]
+        nakshatram:
+          type: ["string", "null"]
+      required:
+        - ancestorId
+        - ancestorName
+        - relationship
+        - anniversaryDate
+        - daysUntil
+
+    CalendarEvent:
+      type: object
+      properties:
+        date:
+          type: string
+        ancestorId:
+          type: integer
+        ancestorName:
+          type: string
+        relationship:
+          type: string
+        type:
+          type: string
+          enum: [anniversary, reminder]
+      required:
+        - date
+        - ancestorId
+        - ancestorName
+        - relationship
+        - type
+
+    # AI
+    SpiritualQuote:
+      type: object
+      properties:
+        quote:
+          type: string
+        source:
+          type: ["string", "null"]
+        language:
+          type: string
+      required:
+        - quote
+        - language
+
+    GenerateMessageBody:
+      type: object
+      properties:
+        ancestorId:
+          type: integer
+        occasion:
+          type: string
+          enum: [anniversary, birthday, general]
+      required:
+        - ancestorId
+        - occasion
+
+    GeneratedMessage:
+      type: object
+      properties:
+        message:
+          type: string
+        language:
+          type: string
+      required:
+        - message
+        - language
+
+    RitualSuggestionsBody:
+      type: object
+      properties:
+        ancestorId:
+          type: integer
+      required:
+        - ancestorId
+
+    RitualSuggestions:
+      type: object
+      properties:
+        suggestions:
+          type: array
+          items:
+            type: string
+        foodOfferings:
+          type: array
+          items:
+            type: string
+        prayers:
+          type: array
+          items:
+            type: string
+      required:
+        - suggestions
+        - foodOfferings
+        - prayers
