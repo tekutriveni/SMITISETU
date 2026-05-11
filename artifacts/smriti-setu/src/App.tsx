@@ -15,6 +15,11 @@ import EditAncestor from "@/pages/ancestors/edit";
 import Panchangam from "@/pages/panchangam";
 import Notifications from "@/pages/notifications";
 import Settings from "@/pages/settings";
+import Reminders from "@/pages/reminders";
+import FamilyTree from "@/pages/family-tree";
+import AiRemembrance from "@/pages/ai-remembrance";
+import MemoryGallery from "@/pages/memory-gallery";
+import SpiritualQuotes from "@/pages/spiritual-quotes";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -62,6 +67,19 @@ function Router() {
       <Route path="/settings">
         <ProtectedRoute component={Settings} />
       </Route>
+      <Route path="/reminders">
+        <ProtectedRoute component={Reminders} />
+      </Route>
+      <Route path="/family-tree">
+        <ProtectedRoute component={FamilyTree} />
+      </Route>
+      <Route path="/ai-remembrance">
+        <ProtectedRoute component={AiRemembrance} />
+      </Route>
+      <Route path="/memory-gallery">
+        <ProtectedRoute component={MemoryGallery} />
+      </Route>
+      <Route path="/spiritual-quotes" component={SpiritualQuotes} />
       <Route component={NotFound} />
     </Switch>
   );

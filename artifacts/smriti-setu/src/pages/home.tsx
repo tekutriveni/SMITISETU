@@ -6,12 +6,12 @@ import { useGetSpiritualQuote, useGetPanchangamToday } from "@workspace/api-clie
 import { isAuthenticated } from "@/lib/auth";
 
 const features = [
-  { icon: Calendar, title: "Panchangam Calendar", desc: "Track Tithi, Nakshatram & Masam with authentic Telugu Panchangam integration." },
-  { icon: Bell, title: "Smart Reminders", desc: "Get notified 1 month, 15 days, 7 days, and 1 day before each anniversary." },
-  { icon: Users, title: "Family Tree", desc: "Organize maternal and paternal ancestors with beautiful family cards." },
-  { icon: Star, title: "AI Remembrance", desc: "AI-generated spiritual messages, ritual suggestions & remembrance quotes." },
-  { icon: Heart, title: "Memory Gallery", desc: "Preserve favorite memories, traditions, and prasadam details forever." },
-  { icon: Flame, title: "Spiritual Quotes", desc: "Daily quotes from Bhagavad Gita, Upanishads & Telugu wisdom traditions." },
+  { icon: Calendar, title: "Panchangam Calendar", desc: "Track Tithi, Nakshatram & Masam with authentic Telugu Panchangam integration.", href: "/panchangam" },
+  { icon: Bell, title: "Smart Reminders", desc: "Get notified 1 month, 15 days, 7 days, and 1 day before each anniversary.", href: "/reminders" },
+  { icon: Users, title: "Family Tree", desc: "Organize maternal and paternal ancestors with beautiful family cards.", href: "/family-tree" },
+  { icon: Star, title: "AI Remembrance", desc: "AI-generated spiritual messages, ritual suggestions & remembrance quotes.", href: "/ai-remembrance" },
+  { icon: Heart, title: "Memory Gallery", desc: "Preserve favorite memories, traditions, and prasadam details forever.", href: "/memory-gallery" },
+  { icon: Flame, title: "Spiritual Quotes", desc: "Daily quotes from Bhagavad Gita, Upanishads & Telugu wisdom traditions.", href: "/spiritual-quotes" },
 ];
 
 export default function Home() {
@@ -126,19 +126,20 @@ export default function Home() {
           {features.map((f, i) => {
             const Icon = f.icon;
             return (
-              <motion.div
-                key={f.title}
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 * i + 0.2 }}
-                className="bg-card border border-card-border rounded-2xl p-6 spiritual-glow transition-all"
-              >
-                <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-primary/10 mb-4">
-                  <Icon className="w-6 h-6 text-primary" />
-                </div>
-                <h3 className="font-serif font-semibold text-foreground mb-2">{f.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{f.desc}</p>
-              </motion.div>
+              <Link key={f.title} href={f.href}>
+                <motion.div
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 * i + 0.2 }}
+                  className="bg-card border border-card-border rounded-2xl p-6 spiritual-glow transition-all hover:border-primary/40 hover:shadow-md cursor-pointer"
+                >
+                  <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-primary/10 mb-4">
+                    <Icon className="w-6 h-6 text-primary" />
+                  </div>
+                  <h3 className="font-serif font-semibold text-foreground mb-2">{f.title}</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{f.desc}</p>
+                </motion.div>
+              </Link>
             );
           })}
         </div>
