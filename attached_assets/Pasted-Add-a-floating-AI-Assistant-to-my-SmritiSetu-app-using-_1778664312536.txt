@@ -1,0 +1,61 @@
+Add a floating AI Assistant to my SmritiSetu app using Gemini API with these requirements:
+
+1. GEMINI API SETUP:
+   - Use Google Gemini API (gemini-1.5-flash model)
+   - API endpoint: https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=YOUR_API_KEY
+   - Store API key in .env file as GEMINI_API_KEY
+   - Include full conversation history in every request using "contents" array with role: "user" and role: "model"
+
+2. FLOATING BUTTON:
+   - Fixed bottom-right corner
+   - 🪔 flame icon, saffron color (#C45E1A)
+   - Pulse animation to attract attention
+
+3. CHAT PANEL:
+   - Slides up on click, full mobile width
+   - Language toggle at top: Telugu | Hindi | English
+   - Chat bubbles area (user right, AI left)
+   - Typing indicator (3 dots animation) while waiting
+   - Text input + send button
+
+4. SYSTEM INSTRUCTION (inject into every Gemini API call as systemInstruction):
+"You are SmritiSetu AI Assistant — a sacred spiritual guide for Telugu Hindu families. You must ALWAYS respond in {SELECTED_LANGUAGE} only — never mix languages. You can answer ANY question the user asks — general knowledge, daily life, spiritual topics, anything. But for topics related to Vardhanti, Tithi, Nakshatram, Panchangam, Amavasya, Ekadashi, Shraddha karma, ancestor remembrance, Hindu rituals and prasadam — give especially detailed, warm and knowledgeable answers like a respected family elder. For all other questions, answer helpfully and naturally in the selected language. Be conversational, friendly and helpful like Gemini or ChatGPT."
+
+5. GEMINI API REQUEST FORMAT:
+{
+  "systemInstruction": {
+    "parts": [{ "text": "...system prompt with language injected..." }]
+  },
+  "contents": [
+    ...full conversation history here...
+  ],
+  "generationConfig": {
+    "maxOutputTokens": 1000,
+    "temperature": 0.7
+  }
+}
+
+6. LANGUAGE BEHAVIOR:
+   - Telugu selected → every response in Telugu only
+   - Hindi selected → every response in Hindi only
+   - English selected → every response in English only
+   - Changing language mid-chat → next response in new language
+   - Inject selected language name into systemInstruction dynamically
+
+7. QUICK SUGGESTION CHIPS (show on open, change with language):
+   Telugu: "వర్ధంతి అంటే ఏమిటి?", "తిథి ఎలా చూసుకోవాలి?", "అమావాస్య ప్రసాదం ఏమిటి?", "నక్షత్రం అర్థం ఏమిటి?"
+   Hindi: "वर्धंती क्या होती है?", "तिथि कैसे देखें?", "अमावस्या पर क्या बनाएं?", "नक्षत्र का मतलब?"
+   English: "What is Vardhanti?", "How to find Tithi?", "Amavasya prasadam ideas?", "What is Nakshatram?"
+
+8. STYLING:
+   - Match SmritiSetu theme exactly
+   - Cream background (#FAF6F0), orange (#C45E1A), warm borders
+   - Playfair Display font for assistant name
+   - Smooth slide-up animation for panel
+
+9. ERROR HANDLING:
+   - If API fails → show "Something went wrong, please try again" in selected language
+   - If no internet → show appropriate message
+   - Never show raw error codes to user
+
+Make this a single self-contained file/component that integrates into the existing SmritiSetu app without breaking anything.

@@ -20,6 +20,7 @@ import FamilyTree from "@/pages/family-tree";
 import AiRemembrance from "@/pages/ai-remembrance";
 import MemoryGallery from "@/pages/memory-gallery";
 import SpiritualQuotes from "@/pages/spiritual-quotes";
+import AiAssistant from "@/components/ai-assistant";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -91,6 +92,7 @@ function App() {
       <TooltipProvider>
         <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
           <Router />
+          <AiAssistant />
         </WouterRouter>
         <Toaster />
       </TooltipProvider>
