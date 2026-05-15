@@ -47,8 +47,12 @@ export default function MemoryGallery() {
                 <Link href={`/ancestors/${ancestor.id}`}>
                   <div className="bg-card border border-card-border rounded-2xl p-6 spiritual-glow hover:border-primary/30 transition-colors cursor-pointer group">
                     <div className="flex items-start gap-4">
-                      <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-primary/10 flex-shrink-0">
-                        <Flame className="w-7 h-7 text-primary" />
+                      <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-primary/10 flex-shrink-0 overflow-hidden">
+                        {ancestor.photoUrl ? (
+                          <img src={ancestor.photoUrl} alt={ancestor.fullName} className="w-14 h-14 object-cover rounded-2xl" />
+                        ) : (
+                          <Flame className="w-7 h-7 text-primary" />
+                        )}
                       </div>
                       <div className="flex-1 min-w-0">
                         <h3 className="font-serif font-semibold text-foreground truncate text-lg">
