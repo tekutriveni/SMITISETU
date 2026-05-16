@@ -194,8 +194,40 @@ export default function EditAncestor() {
                   <FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
               )} />
               <FormField control={form.control} name="photoUrl" render={({ field }) => (
-                <FormItem className="md:col-span-2"><FormLabel>Photo URL</FormLabel>
-                  <FormControl><Input {...field} placeholder="https://..." /></FormControl><FormMessage /></FormItem>
+                <FormItem className="md:col-span-2">
+                  <FormLabel>Photo</FormLabel>
+                  <FormControl>
+                    <div className="space-y-3">
+                      {field.value ? (
+                        <div className="relative w-24 h-24">
+                          <img src={field.value} alt="Ancestor" className="w-24 h-24 rounded-2xl object-cover border border-border" />
+                          <button type="button" onClick={() => field.onChange("")}
+                            className="absolute -top-2 -right-2 bg-destructive text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">✕</button>
+                        </div>
+                      ) : null}
+                      <label className="flex items-center gap-2 cursor-pointer w-fit">
+                        <input type="file" accept="image/*" className="hidden"
+                          onChange={async (e) => {
+                            const file = e.target.files?.[0];
+                            if (!file) return;
+                            const formData = new FormData();
+                            formData.append("file", file);
+                            formData.append("upload_preset", import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET);
+                            const res = await fetch(`https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/image/upload`, {
+                              method: "POST", body: formData
+                            });
+                            const data = await res.json();
+                            field.onChange(data.secure_url);
+                          }}
+                        />
+                        <div className="flex items-center gap-2 px-4 py-2 border border-dashed border-border rounded-xl hover:border-primary/50 transition-colors text-sm text-muted-foreground">
+                          📷 {field.value ? "Change Photo" : "Upload Photo"}
+                        </div>
+                      </label>
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
               )} />
             </Section>
 
