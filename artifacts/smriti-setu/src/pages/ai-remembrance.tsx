@@ -4,15 +4,17 @@ import { Star, Sparkles, Flame } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import Layout from "@/components/layout";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { useListAncestors, useGenerateRemembranceMessage } from "@workspace/api-client-react";
 
 const OCCASIONS = [
-  { value: "anniversary", label: "Death Anniversary (Vardhanti)" },
-  { value: "birthday", label: "Birthday Remembrance" },
-  { value: "general", label: "General Remembrance" },
+  { value: "anniversary", label: t("vardhanti") },
+  { value: "birthday", label: t("birthdayRemembrance") },
+  { value: "general", label: t("generalRemembrance") },
 ];
 
 export default function AiRemembrance() {
+  const { t } = useLanguage();
   const { data: ancestors } = useListAncestors();
   const [selectedAncestor, setSelectedAncestor] = useState<string>("");
   const [selectedOccasion, setSelectedOccasion] = useState<string>("anniversary");
@@ -48,7 +50,7 @@ export default function AiRemembrance() {
               {ancestors && ancestors.length > 0 ? (
                 <Select value={selectedAncestor} onValueChange={setSelectedAncestor}>
                   <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Choose an ancestor…" />
+                    <SelectValue placeholder={t("chooseAncestor")} />
                   </SelectTrigger>
                   <SelectContent>
                     {ancestors.map((a) => (

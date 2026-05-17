@@ -3,15 +3,17 @@ import { Users, Plus, ChevronRight, Flame } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/layout";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { useListAncestors } from "@workspace/api-client-react";
 
 const RELATIONSHIP_GROUPS: Record<string, string[]> = {
-  Paternal: ["Father", "Grandfather", "Great Grandfather", "Paternal Uncle", "Paternal Aunt"],
-  Maternal: ["Mother", "Grandmother", "Great Grandmother", "Maternal Uncle", "Maternal Aunt"],
+  Paternal: [t("father"), t("grandfather"), t("greatGrandfather"), t("paternalUncle"), t("paternalAunt")],
+  Maternal: [t("mother"), t("grandmother"), t("greatGrandmother"), t("maternalUncle"), t("maternalAunt")],
   Other: [],
 };
 
 export default function FamilyTree() {
+  const { t } = useLanguage();
   const { data: ancestors } = useListAncestors();
 
   const grouped: Record<string, typeof ancestors> = { Paternal: [], Maternal: [], Other: [] };

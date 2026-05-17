@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import Layout from "@/components/layout";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { useListAncestors } from "@workspace/api-client-react";
 import { cn } from "@/lib/utils";
 
@@ -74,6 +75,7 @@ function AncestorCard({ ancestor }: { ancestor: any }) {
 }
 
 export default function AncestorsList() {
+  const { t } = useLanguage();
   const [search, setSearch] = useState("");
   const [familySide, setFamilySide] = useState<string>("all");
 
@@ -108,7 +110,7 @@ export default function AncestorsList() {
           <div className="relative flex-1 min-w-48">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <Input
-              placeholder="Search ancestors..."
+              placeholder={t("searchAncestors")}
               className="pl-10"
               value={search}
               onChange={(e) => setSearch(e.target.value)}

@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
 import Layout from "@/components/layout";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { useToast } from "@/hooks/use-toast";
 import {
   useGetAncestor, getGetAncestorQueryKey, getListAncestorsQueryKey,
@@ -25,6 +26,7 @@ function DetailRow({ label, value }: { label: string; value?: string | number | 
 }
 
 export default function AncestorDetail() {
+  const { t } = useLanguage();
   const [, params] = useRoute("/ancestors/:id");
   const [, setLocation] = useLocation();
   const { toast } = useToast();

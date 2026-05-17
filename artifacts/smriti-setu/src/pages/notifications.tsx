@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import Layout from "@/components/layout";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { useToast } from "@/hooks/use-toast";
 import {
   useListNotifications, getListNotificationsQueryKey,
@@ -14,6 +15,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { cn } from "@/lib/utils";
 
 export default function Notifications() {
+  const { t } = useLanguage();
   const { data: notifications, isLoading } = useListNotifications();
   const markRead = useMarkNotificationRead();
   const markAll = useMarkAllNotificationsRead();
@@ -36,7 +38,7 @@ export default function Notifications() {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: getListNotificationsQueryKey() });
         queryClient.invalidateQueries({ queryKey: getGetUnreadNotificationCountQueryKey() });
-        toast({ title: "All notifications marked as read" });
+        toast({ title: t("allRead") });
       },
     });
   }
@@ -48,7 +50,7 @@ export default function Notifications() {
           <div>
             <h1 className="font-serif text-3xl font-bold text-foreground">Notifications</h1>
             <p className="text-muted-foreground text-sm mt-1">
-              {unread > 0 ? `${unread} unread` : "All caught up"}
+              {unread > 0 ? unread + " " + t("unread") : t("allCaughtUp")}
             </p>
           </div>
           {unread > 0 && (

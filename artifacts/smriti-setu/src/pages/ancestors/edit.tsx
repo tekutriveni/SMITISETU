@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Skeleton } from "@/components/ui/skeleton";
 import Layout from "@/components/layout";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { useToast } from "@/hooks/use-toast";
 import {
   useGetAncestor, getGetAncestorQueryKey, getListAncestorsQueryKey,
@@ -62,6 +63,7 @@ const REMINDER_OPTIONS = [
 ];
 
 export default function EditAncestor() {
+  const { t } = useLanguage();
   const [, params] = useRoute("/ancestors/:id/edit");
   const [, setLocation] = useLocation();
   const { toast } = useToast();

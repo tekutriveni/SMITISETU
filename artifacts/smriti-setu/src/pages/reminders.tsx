@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Bell, Flame, Clock, Calendar } from "lucide-react";
 import Layout from "@/components/layout";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { useGetTodayReminders, useGetUpcomingEvents } from "@workspace/api-client-react";
 import { Badge } from "@/components/ui/badge";
 
@@ -12,6 +13,7 @@ function CountdownBadge({ days }: { days: number }) {
 }
 
 export default function Reminders() {
+  const { t } = useLanguage();
   const { data: todayReminders } = useGetTodayReminders();
   const { data: upcoming } = useGetUpcomingEvents();
 

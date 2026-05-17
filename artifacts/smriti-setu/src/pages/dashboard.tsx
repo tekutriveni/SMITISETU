@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import Layout from "@/components/layout";
+import { useLanguage } from "@/contexts/LanguageContext";
 import {
   useGetDashboardSummary,
   useGetUpcomingEvents,
@@ -23,6 +24,7 @@ function CountdownBadge({ days }: { days: number }) {
 }
 
 export default function Dashboard() {
+  const { t } = useLanguage();
   const { data: me } = useGetMe();
   const { data: summary, isLoading: summaryLoading } = useGetDashboardSummary();
   const { data: upcoming, isLoading: upcomingLoading } = useGetUpcomingEvents();
@@ -31,10 +33,10 @@ export default function Dashboard() {
   const { data: todayReminders } = useGetTodayReminders();
 
   const stats = [
-    { label: "Ancestors", value: summary?.totalAncestors ?? 0, icon: Users, color: "text-primary" },
-    { label: "This Month", value: summary?.upcomingThisMonth ?? 0, icon: Calendar, color: "text-accent" },
-    { label: "This Week", value: summary?.upcomingThisWeek ?? 0, icon: Clock, color: "text-orange-500" },
-    { label: "Today", value: summary?.todayCount ?? 0, icon: Flame, color: "text-destructive" },
+    { label: t("ancestors"), value: summary?.totalAncestors ?? 0, icon: Users, color: "text-primary" },
+    { label: t("thisMonth"), value: summary?.upcomingThisMonth ?? 0, icon: Calendar, color: "text-accent" },
+    { label: t("thisWeek"), value: summary?.upcomingThisWeek ?? 0, icon: Clock, color: "text-orange-500" },
+    { label: t("today"), value: summary?.todayCount ?? 0, icon: Flame, color: "text-destructive" },
   ];
 
   return (
@@ -46,7 +48,7 @@ export default function Dashboard() {
             <h1 className="font-serif text-3xl font-bold text-foreground">
               Namaste{me?.name ? `, ${me.name.split(" ")[0]}` : ""}
             </h1>
-            <p className="text-muted-foreground mt-1">May your ancestors' blessings guide your day.</p>
+            <p className="text-muted-foreground mt-1">{t("dashboardSubtitle")}</p>
           </div>
           <Link href="/ancestors/new">
             <Button className="hidden sm:flex items-center gap-2" data-testid="button-add-ancestor">
@@ -65,7 +67,7 @@ export default function Dashboard() {
           >
             <div className="flex items-center gap-2 mb-3">
               <Bell className="w-5 h-5 text-primary" />
-              <h2 className="font-serif font-semibold text-foreground">Today's Remembrances</h2>
+              <h2 className="font-serif font-semibold text-foreground">{t("todayRemembrances")}</h2>
             </div>
             <div className="space-y-2">
               {todayReminders.map((r) => (
@@ -109,7 +111,7 @@ export default function Dashboard() {
             <div className="flex items-center justify-between mb-5">
               <div className="flex items-center gap-2">
                 <Calendar className="w-5 h-5 text-primary" />
-                <h2 className="font-serif font-semibold text-foreground">Upcoming Remembrances</h2>
+                <h2 className="font-serif font-semibold text-foreground">{t("upcomingRemembrances")}</h2>
               </div>
               <Link href="/ancestors">
                 <Button variant="ghost" size="sm" className="text-primary">
@@ -148,7 +150,7 @@ export default function Dashboard() {
                 <Calendar className="w-10 h-10 text-muted-foreground/40 mx-auto mb-3" />
                 <p className="text-muted-foreground text-sm">No upcoming remembrances in the next 90 days.</p>
                 <Link href="/ancestors/new">
-                  <Button variant="outline" size="sm" className="mt-3">Add an Ancestor</Button>
+                  <Button variant="outline" size="sm" className="mt-3">{t("addAncestor")}</Button>
                 </Link>
               </div>
             )}
@@ -161,7 +163,7 @@ export default function Dashboard() {
               <div className="bg-card border border-card-border rounded-2xl p-5">
                 <div className="flex items-center gap-2 mb-4">
                   <Calendar className="w-4 h-4 text-primary" />
-                  <h3 className="font-serif font-semibold text-sm text-foreground">Today's Panchangam</h3>
+                  <h3 className="font-serif font-semibold text-sm text-foreground">{t("todayPanchangam")}</h3>
                 </div>
                 <div className="space-y-2">
                   {[
@@ -190,7 +192,7 @@ export default function Dashboard() {
               <div className="bg-accent/10 border border-accent/20 rounded-2xl p-5">
                 <div className="flex items-center gap-2 mb-3">
                   <Star className="w-4 h-4 text-accent" />
-                  <h3 className="font-serif font-semibold text-sm text-foreground">Daily Quote</h3>
+                  <h3 className="font-serif font-semibold text-sm text-foreground">{t("dailyQuote")}</h3>
                 </div>
                 <p className="font-serif text-sm italic text-foreground/90 leading-relaxed">"{quote.quote}"</p>
                 {quote.source && <p className="text-xs text-muted-foreground mt-2">— {quote.source}</p>}
@@ -203,8 +205,8 @@ export default function Dashboard() {
                 <div className="flex items-center gap-3">
                   <Plus className="w-6 h-6" />
                   <div>
-                    <p className="font-medium text-sm">Add Ancestor</p>
-                    <p className="text-xs opacity-80">Record their memory</p>
+                    <p className="font-medium text-sm">{t("addAncestor")}</p>
+                    <p className="text-xs opacity-80">{t("recordMemory")}</p>
                   </div>
                 </div>
               </div>

@@ -4,6 +4,7 @@ import { Calendar, Sun, Star, Moon, ChevronLeft, ChevronRight } from "lucide-rea
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import Layout from "@/components/layout";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { useGetPanchangamToday, useGetCalendarEvents } from "@workspace/api-client-react";
 import { cn } from "@/lib/utils";
 
@@ -18,6 +19,7 @@ function getFirstDayOfMonth(year: number, month: number) {
 }
 
 export default function Panchangam() {
+  const { t } = useLanguage();
   const today = new Date();
   const [viewDate, setViewDate] = useState({ year: today.getFullYear(), month: today.getMonth() + 1 });
 
@@ -73,11 +75,11 @@ export default function Panchangam() {
             <>
               <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-5">
                 {[
-                  { label: "Tithi", value: panchangamToday.tithi, icon: Moon },
-                  { label: "Nakshatram", value: panchangamToday.nakshatram, icon: Star },
-                  { label: "Masam", value: panchangamToday.masam, icon: Calendar },
-                  { label: "Paksham", value: panchangamToday.paksham, icon: Moon },
-                  { label: "Vara", value: panchangamToday.vara, icon: Sun },
+                  { label: t("tithi"), value: panchangamToday.tithi, icon: Moon },
+                  { label: t("nakshatram"), value: panchangamToday.nakshatram, icon: Star },
+                  { label: t("masam"), value: panchangamToday.masam, icon: Calendar },
+                  { label: t("paksham"), value: panchangamToday.paksham, icon: Moon },
+                  { label: t("vara"), value: panchangamToday.vara, icon: Sun },
                 ].map((item) => {
                   const Icon = item.icon;
                   return (

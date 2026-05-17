@@ -3,9 +3,11 @@ import { Heart, Flame, ChevronRight, Plus } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/layout";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { useListAncestors } from "@workspace/api-client-react";
 
 export default function MemoryGallery() {
+  const { t } = useLanguage();
   const { data: ancestors } = useListAncestors();
 
   return (
