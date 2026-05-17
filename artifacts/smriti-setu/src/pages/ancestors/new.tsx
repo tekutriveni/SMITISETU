@@ -226,13 +226,21 @@ function moonLong(j: number) {
 function calcPanchangam(dateStr: string) {
   const [y, m, d] = dateStr.split("-").map(Number);
   const j = jd(y, m, d);
-  const sl = sunLong(j),
-    ml = moonLong(j);
+
+  // Ayanamsa (Lahiri) - Telugu Panchangam use చేసే system
+  const T = (j - 2451545) / 36525;
+  const ayanamsa =
+    23.85 + 0.013646 * (y - 1900) - 0.000139 * Math.pow(y - 1900, 2);
+
+  const sl = (((sunLong(j) - ayanamsa) % 360) + 360) % 360;
+  const ml = (((moonLong(j) - ayanamsa) % 360) + 360) % 360;
+
   const diff = (((ml - sl) % 360) + 360) % 360;
   const nakshatram = NAKSHATRAMS[Math.floor(ml / (360 / 27)) % 27];
   const masam = MASAMS_LIST[Math.floor(sl / 30) % 12];
   const tyStart = m < 4 || (m === 3 && d < 15) ? y - 1 : y;
   const samvatsaram = SAMVATSARAMS[(tyStart - 1987 + 600) % 60];
+
   return {
     tithi: TITHIS_LIST[Math.floor(diff / 12)],
     paksham: diff < 180 ? "Shukla" : "Krishna",
@@ -865,73 +873,230 @@ export default function AddAncestor() {
               <FormField
                 control={form.control}
                 name="ritualNotes"
-                render={({ field }) => (
-                  <FormItem className="md:col-span-2">
-                    <FormLabel>Ritual Notes</FormLabel>
-                    <FormControl>
+                render={({ field }) => {
+                  const OPTIONS = [
+                    "Masoosavam / Vardhanti chestham",
+                    "Brahmin bhojnam pettadam",
+                    "Deepam and agarbatti veyyadam",
+                    "Pinda pradam chestham",
+                    "Ganga jalam chulladam",
+                    "Temple lo special puja chestham",
+                    "Vedic mantras cheppistham",
+                    "Gothram cheppi tarpanam chestham",
+                    "Anna danam chestham",
+                    "Go danam / Vasthra danam chestham",
+                    "16 upacharalu chestham",
+                    "Sapindi karanam chestham",
+                  ];
+                  const selected: string[] = field.value
+                    ? field.value.split(", ").filter(Boolean)
+                    : [];
+                  const toggle = (opt: string) => {
+                    const next = selected.includes(opt)
+                      ? selected.filter((s) => s !== opt)
+                      : [...selected, opt];
+                    field.onChange(next.join(", "));
+                  };
+                  return (
+                    <FormItem className="md:col-span-2">
+                      <FormLabel>Ritual Notes</FormLabel>
+                      <div className="flex flex-wrap gap-2 mt-1">
+                        {OPTIONS.map((opt) => (
+                          <button
+                            key={opt}
+                            type="button"
+                            onClick={() => toggle(opt)}
+                            className={`px-3 py-1.5 rounded-xl text-xs border transition-all ${selected.includes(opt) ? "bg-primary text-white border-primary" : "bg-background border-border text-muted-foreground hover:border-primary/50"}`}
+                          >
+                            {selected.includes(opt) ? "✓ " : ""}
+                            {opt}
+                          </button>
+                        ))}
+                      </div>
                       <Textarea
+                        className="mt-2"
                         {...field}
-                        placeholder="Notes about the remembrance ceremony..."
-                        rows={3}
+                        placeholder="Additional notes..."
+                        rows={2}
                       />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                      <FormMessage />
+                    </FormItem>
+                  );
+                }}
               />
               <FormField
                 control={form.control}
                 name="traditions"
-                render={({ field }) => (
-                  <FormItem className="md:col-span-2">
-                    <FormLabel>Important Traditions</FormLabel>
-                    <FormControl>
+                render={({ field }) => {
+                  const OPTIONS = [
+                    "Amavasya nadi snanam",
+                    "Karthika masam deepalu veyyadam",
+                    "Sankranthi lo visheshanga gurtu chestham",
+                    "Annual tithi lo family gather avutham",
+                    "Pitru paksha tarpanam chestham",
+                    "Dana dharmalu chestham",
+                    "Ekadashi fasting chestham",
+                    "Shraddha karma chestham",
+                    "Mahalaya amavasya visheshanga chestham",
+                    "Navaratri lo special puja chestham",
+                    "Karthika somavaram fasting",
+                    "Tulasi puja chestham",
+                  ];
+                  const selected: string[] = field.value
+                    ? field.value.split(", ").filter(Boolean)
+                    : [];
+                  const toggle = (opt: string) => {
+                    const next = selected.includes(opt)
+                      ? selected.filter((s) => s !== opt)
+                      : [...selected, opt];
+                    field.onChange(next.join(", "));
+                  };
+                  return (
+                    <FormItem className="md:col-span-2">
+                      <FormLabel>Important Traditions</FormLabel>
+                      <div className="flex flex-wrap gap-2 mt-1">
+                        {OPTIONS.map((opt) => (
+                          <button
+                            key={opt}
+                            type="button"
+                            onClick={() => toggle(opt)}
+                            className={`px-3 py-1.5 rounded-xl text-xs border transition-all ${selected.includes(opt) ? "bg-primary text-white border-primary" : "bg-background border-border text-muted-foreground hover:border-primary/50"}`}
+                          >
+                            {selected.includes(opt) ? "✓ " : ""}
+                            {opt}
+                          </button>
+                        ))}
+                      </div>
                       <Textarea
+                        className="mt-2"
                         {...field}
-                        placeholder="Family traditions to follow..."
-                        rows={3}
+                        placeholder="Additional traditions..."
+                        rows={2}
                       />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                      <FormMessage />
+                    </FormItem>
+                  );
+                }}
               />
               <FormField
                 control={form.control}
                 name="favoriteMemories"
-                render={({ field }) => (
-                  <FormItem className="md:col-span-2">
-                    <FormLabel>Favorite Memories</FormLabel>
-                    <FormControl>
+                render={({ field }) => {
+                  const OPTIONS = [
+                    "Always early morning prayers chesevaru",
+                    "Ramayanam / Bhagavatam cheppevaru",
+                    "Puja chala bhakthiga chesevaru",
+                    "Peddalu ni chala gouravam chesevaru",
+                    "Pilalaki stories cheppevaru",
+                    "Vanta chala bagundedi",
+                    "Haasyam ga matladuthu anandanga unchevaru",
+                    "Bhajans / Keertanas padevaru",
+                    "Tota pani ishtapadevaru",
+                    "Ayurvedic remedies cheppevaru",
+                    "Pilalaki moral values nerpevaru",
+                    "Family ni okkatiga unchevaru",
+                    "Guests ni chala adaranga treat chesevaru",
+                    "Mantralu / Shlokas cheppevaru",
+                    "Mahabharatam / Puranas cheppevaru",
+                    "Late nights lo kathalu cheppevaru",
+                    "Perinti lo peddaga puja chesevaru",
+                    "Andharitho prema ga matladevaru",
+                  ];
+                  const selected: string[] = field.value
+                    ? field.value.split(", ").filter(Boolean)
+                    : [];
+                  const toggle = (opt: string) => {
+                    const next = selected.includes(opt)
+                      ? selected.filter((s) => s !== opt)
+                      : [...selected, opt];
+                    field.onChange(next.join(", "));
+                  };
+                  return (
+                    <FormItem className="md:col-span-2">
+                      <FormLabel>Favorite Memories</FormLabel>
+                      <div className="flex flex-wrap gap-2 mt-1">
+                        {OPTIONS.map((opt) => (
+                          <button
+                            key={opt}
+                            type="button"
+                            onClick={() => toggle(opt)}
+                            className={`px-3 py-1.5 rounded-xl text-xs border transition-all ${selected.includes(opt) ? "bg-primary text-white border-primary" : "bg-background border-border text-muted-foreground hover:border-primary/50"}`}
+                          >
+                            {selected.includes(opt) ? "✓ " : ""}
+                            {opt}
+                          </button>
+                        ))}
+                      </div>
                       <Textarea
+                        className="mt-2"
                         {...field}
-                        placeholder="Cherished memories..."
-                        rows={3}
+                        placeholder="Additional memories..."
+                        rows={2}
                       />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                      <FormMessage />
+                    </FormItem>
+                  );
+                }}
               />
               <FormField
                 control={form.control}
                 name="prasadamDetails"
-                render={({ field }) => (
-                  <FormItem className="md:col-span-2">
-                    <FormLabel>Food Offerings / Prasadam</FormLabel>
-                    <FormControl>
+                render={({ field }) => {
+                  const OPTIONS = [
+                    "Pulihora",
+                    "Payasam / Kheer",
+                    "Vadapappu & Panakam",
+                    "Garelu / Vada",
+                    "Bobbatlu",
+                    "Chalimidi",
+                    "Kobbari mithai",
+                    "Chakkara Pongali",
+                    "Daddojanam / Curd rice",
+                    "Modak / Kudumulu",
+                    "Nuvvula Laddu",
+                    "Banana / Fruits offering",
+                    "Tamarind rice",
+                    "Coconut rice",
+                    "Milk / Panchamrutham",
+                    "Sesame rice",
+                  ];
+                  const selected: string[] = field.value
+                    ? field.value.split(", ").filter(Boolean)
+                    : [];
+                  const toggle = (opt: string) => {
+                    const next = selected.includes(opt)
+                      ? selected.filter((s) => s !== opt)
+                      : [...selected, opt];
+                    field.onChange(next.join(", "));
+                  };
+                  return (
+                    <FormItem className="md:col-span-2">
+                      <FormLabel>Food Offerings / Prasadam</FormLabel>
+                      <div className="flex flex-wrap gap-2 mt-1">
+                        {OPTIONS.map((opt) => (
+                          <button
+                            key={opt}
+                            type="button"
+                            onClick={() => toggle(opt)}
+                            className={`px-3 py-1.5 rounded-xl text-xs border transition-all ${selected.includes(opt) ? "bg-primary text-white border-primary" : "bg-background border-border text-muted-foreground hover:border-primary/50"}`}
+                          >
+                            {selected.includes(opt) ? "✓ " : ""}
+                            {opt}
+                          </button>
+                        ))}
+                      </div>
                       <Textarea
+                        className="mt-2"
                         {...field}
-                        placeholder="Their favorite foods and prasadam details..."
+                        placeholder="Additional prasadam details..."
                         rows={2}
                       />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                      <FormMessage />
+                    </FormItem>
+                  );
+                }}
               />
             </Section>
-
             <div className="flex gap-3 justify-end pb-8">
               <Button
                 type="button"
