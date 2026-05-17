@@ -875,18 +875,18 @@ export default function AddAncestor() {
                 name="ritualNotes"
                 render={({ field }) => {
                   const OPTIONS = [
-                    "Masoosavam / Vardhanti chestham",
-                    "Brahmin bhojnam pettadam",
-                    "Deepam and agarbatti veyyadam",
-                    "Pinda pradam chestham",
-                    "Ganga jalam chulladam",
-                    "Temple lo special puja chestham",
-                    "Vedic mantras cheppistham",
-                    "Gothram cheppi tarpanam chestham",
-                    "Anna danam chestham",
-                    "Go danam / Vasthra danam chestham",
-                    "16 upacharalu chestham",
-                    "Sapindi karanam chestham",
+                    "Perform Masoosavam / Vardhanti",
+                    "Arrange Brahmin feast",
+                    "Light deepam & agarbatti",
+                    "Offer Pinda pradam",
+                    "Sprinkle Ganga jalam",
+                    "Special puja at temple",
+                    "Recite Vedic mantras",
+                    "Perform Gothram tarpanam",
+                    "Arrange Anna danam",
+                    "Go danam / Vasthra danam",
+                    "Perform 16 upacharalu",
+                    "Perform Sapindi karanam",
                   ];
                   const selected: string[] = field.value
                     ? field.value.split(", ").filter(Boolean)
@@ -929,18 +929,18 @@ export default function AddAncestor() {
                 name="traditions"
                 render={({ field }) => {
                   const OPTIONS = [
-                    "Amavasya nadi snanam",
-                    "Karthika masam deepalu veyyadam",
-                    "Sankranthi lo visheshanga gurtu chestham",
-                    "Annual tithi lo family gather avutham",
-                    "Pitru paksha tarpanam chestham",
-                    "Dana dharmalu chestham",
-                    "Ekadashi fasting chestham",
-                    "Shraddha karma chestham",
-                    "Mahalaya amavasya visheshanga chestham",
-                    "Navaratri lo special puja chestham",
-                    "Karthika somavaram fasting",
-                    "Tulasi puja chestham",
+                    "Amavasya river bath",
+                    "Light lamps in Karthika masam",
+                    "Special remembrance on Sankranthi",
+                    "Family gathering on annual tithi",
+                    "Pitru paksha tarpanam",
+                    "Perform Dana dharmalu",
+                    "Ekadashi fasting",
+                    "Perform Shraddha karma",
+                    "Special Mahalaya amavasya observance",
+                    "Special puja during Navaratri",
+                    "Karthika Somavaram fasting",
+                    "Tulasi puja",
                   ];
                   const selected: string[] = field.value
                     ? field.value.split(", ").filter(Boolean)
@@ -983,24 +983,24 @@ export default function AddAncestor() {
                 name="favoriteMemories"
                 render={({ field }) => {
                   const OPTIONS = [
-                    "Always early morning prayers chesevaru",
-                    "Ramayanam / Bhagavatam cheppevaru",
-                    "Puja chala bhakthiga chesevaru",
-                    "Peddalu ni chala gouravam chesevaru",
-                    "Pilalaki stories cheppevaru",
-                    "Vanta chala bagundedi",
-                    "Haasyam ga matladuthu anandanga unchevaru",
-                    "Bhajans / Keertanas padevaru",
-                    "Tota pani ishtapadevaru",
-                    "Ayurvedic remedies cheppevaru",
-                    "Pilalaki moral values nerpevaru",
-                    "Family ni okkatiga unchevaru",
-                    "Guests ni chala adaranga treat chesevaru",
-                    "Mantralu / Shlokas cheppevaru",
-                    "Mahabharatam / Puranas cheppevaru",
-                    "Late nights lo kathalu cheppevaru",
-                    "Perinti lo peddaga puja chesevaru",
-                    "Andharitho prema ga matladevaru",
+                    "Always did early morning prayers",
+                    "Used to recite Ramayanam / Bhagavatam",
+                    "Did puja with great devotion",
+                    "Respected elders greatly",
+                    "Told stories to children",
+                    "Was an excellent cook",
+                    "Kept everyone happy with humor",
+                    "Sang bhajans and keertanas",
+                    "Loved gardening",
+                    "Knew Ayurvedic remedies",
+                    "Taught moral values to children",
+                    "Kept the family united",
+                    "Welcomed guests warmly",
+                    "Chanted mantras and shlokas",
+                    "Narrated Mahabharatam / Puranas",
+                    "Told stories late at night",
+                    "Led pujas at home",
+                    "Spoke lovingly with everyone",
                   ];
                   const selected: string[] = field.value
                     ? field.value.split(", ").filter(Boolean)
