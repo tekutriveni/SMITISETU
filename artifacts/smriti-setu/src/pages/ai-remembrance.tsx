@@ -7,14 +7,15 @@ import Layout from "@/components/layout";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useListAncestors, useGenerateRemembranceMessage } from "@workspace/api-client-react";
 
-const OCCASIONS = [
-  { value: "anniversary", label: t("vardhanti") },
-  { value: "birthday", label: t("birthdayRemembrance") },
-  { value: "general", label: t("generalRemembrance") },
-];
+
 
 export default function AiRemembrance() {
   const { t } = useLanguage();
+  const OCCASIONS = [
+    { value: "anniversary", label: t("vardhanti") },
+    { value: "birthday", label: t("birthdayRemembrance") },
+    { value: "general", label: t("generalRemembrance") },
+  ];
   const { data: ancestors } = useListAncestors();
   const [selectedAncestor, setSelectedAncestor] = useState<string>("");
   const [selectedOccasion, setSelectedOccasion] = useState<string>("anniversary");
