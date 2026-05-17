@@ -289,12 +289,7 @@ const RELATIONSHIPS = [
   "Spouse",
   "Other",
 ];
-const REMINDER_OPTIONS = [
-  { value: 30, label: "1 month before" },
-  { value: 15, label: "15 days before" },
-  { value: 7, label: "7 days before" },
-  { value: 1, label: "1 day before" },
-];
+
 
 function Section({
   title,
@@ -316,6 +311,12 @@ function Section({
 
 export default function AddAncestor() {
   const { t } = useLanguage();
+  const REMINDER_OPTIONS = [
+    { value: 30, label: t("1monthBefore") },
+    { value: 15, label: t("15daysBefore") },
+    { value: 7, label: t("7daysBefore") },
+    { value: 1, label: t("1dayBefore") },
+  ];
   const [, setLocation] = useLocation();
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -378,7 +379,7 @@ export default function AddAncestor() {
             queryKey: getListAncestorsQueryKey(),
           });
           toast({
-            title: "Ancestor added",
+            title: t("ancestorAdded"),
             description: `${ancestor.fullName} has been remembered.`,
           });
           setLocation(`/ancestors/${ancestor.id}`);
@@ -418,13 +419,13 @@ export default function AddAncestor() {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             {/* Basic Details */}
-            <Section title="Basic Details">
+            <Section title={t("basicDetails")}>
               <FormField
                 control={form.control}
                 name="fullName"
                 render={({ field }) => (
                   <FormItem className="md:col-span-2">
-                    <FormLabel>Full Name *</FormLabel>
+                    <FormLabel>{t("fullName")}</FormLabel>
                     <FormControl>
                       <Input
                         {...field}
@@ -441,14 +442,14 @@ export default function AddAncestor() {
                 name="relationship"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Relationship *</FormLabel>
+                    <FormLabel>{t("relationship")}</FormLabel>
                     <FormControl>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
                       >
                         <SelectTrigger data-testid="select-relationship">
-                          <SelectValue placeholder="Select" />
+                          <SelectValue placeholder={t("select")} />
                         </SelectTrigger>
                         <SelectContent>
                           {RELATIONSHIPS.map((r) => (
@@ -468,7 +469,7 @@ export default function AddAncestor() {
                 name="gender"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Gender *</FormLabel>
+                    <FormLabel>{t("gender")}</FormLabel>
                     <FormControl>
                       <Select
                         onValueChange={field.onChange}
@@ -478,9 +479,9 @@ export default function AddAncestor() {
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="Male">Male</SelectItem>
-                          <SelectItem value="Female">Female</SelectItem>
-                          <SelectItem value="Other">Other</SelectItem>
+                          <SelectItem value="Male">{t("male")}</SelectItem>
+                          <SelectItem value="Female">{t("female")}</SelectItem>
+                          <SelectItem value="Other">{t("other")}</SelectItem>
                         </SelectContent>
                       </Select>
                     </FormControl>
@@ -493,7 +494,7 @@ export default function AddAncestor() {
                 name="dateOfDeath"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Date of Death (Vardhanti) *</FormLabel>
+                    <FormLabel>{t("dateOfDeath")}</FormLabel>
                     <FormControl>
                       <Input
                         {...field}
@@ -514,7 +515,7 @@ export default function AddAncestor() {
                 name="dateOfBirth"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Date of Birth (optional)</FormLabel>
+                    <FormLabel>{t("dateOfBirth")}</FormLabel>
                     <FormControl>
                       <Input {...field} type="date" />
                     </FormControl>
@@ -527,7 +528,7 @@ export default function AddAncestor() {
                 name="placeOfDeath"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Place</FormLabel>
+                    <FormLabel>{t("place")}</FormLabel>
                     <FormControl>
                       <Input {...field} placeholder="Hyderabad, Telangana" />
                     </FormControl>
@@ -540,7 +541,7 @@ export default function AddAncestor() {
                 name="photoUrl"
                 render={({ field }) => (
                   <FormItem className="md:col-span-2">
-                    <FormLabel>Photo</FormLabel>
+                    <FormLabel>{t("photo")}</FormLabel>
                     <FormControl>
                       <div className="space-y-3">
                         {field.value && (
@@ -582,7 +583,7 @@ export default function AddAncestor() {
                             }}
                           />
                           <div className="flex items-center gap-2 px-4 py-2 border border-dashed border-border rounded-xl hover:border-primary/50 transition-colors text-sm text-muted-foreground">
-                            📷 {field.value ? "Change Photo" : "Upload Photo"}
+                            📷 {field.value ? t("changePhoto") : t("uploadPhoto")}
                           </div>
                         </label>
                       </div>
@@ -597,7 +598,7 @@ export default function AddAncestor() {
             <div className="bg-card border border-card-border rounded-2xl p-6">
               <h2 className="font-serif font-semibold text-foreground mb-1 flex items-center gap-2">
                 <Flame className="w-4 h-4 text-primary" />
-                Spiritual / Panchangam Details
+                {t("spiritualDetails")}
               </h2>
               {autoFilled ? (
                 <div className="flex items-center gap-2 text-xs text-emerald-600 mb-4">
@@ -616,7 +617,7 @@ export default function AddAncestor() {
                   name="tithi"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Tithi</FormLabel>
+                      <FormLabel>{t("tithi")}</FormLabel>
                       <FormControl>
                         <Select
                           onValueChange={field.onChange}
@@ -649,7 +650,7 @@ export default function AddAncestor() {
                   name="nakshatram"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Nakshatram</FormLabel>
+                      <FormLabel>{t("nakshatram")}</FormLabel>
                       <FormControl>
                         <Select
                           onValueChange={field.onChange}
@@ -682,7 +683,7 @@ export default function AddAncestor() {
                   name="masam"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Telugu Masam</FormLabel>
+                      <FormLabel>{t("masam")}</FormLabel>
                       <FormControl>
                         <Select
                           onValueChange={field.onChange}
@@ -715,7 +716,7 @@ export default function AddAncestor() {
                   name="paksham"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Paksham</FormLabel>
+                      <FormLabel>{t("paksham")}</FormLabel>
                       <FormControl>
                         <Select
                           onValueChange={field.onChange}
@@ -749,7 +750,7 @@ export default function AddAncestor() {
                   name="samvatsaram"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Samvatsaram</FormLabel>
+                      <FormLabel>{t("samvatsaram")}</FormLabel>
                       <FormControl>
                         <Input
                           {...field}
@@ -770,7 +771,7 @@ export default function AddAncestor() {
                   name="teluguYearName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Telugu Year Name</FormLabel>
+                      <FormLabel>{t("teluguYearName")}</FormLabel>
                       <FormControl>
                         <Input
                           {...field}
@@ -791,7 +792,7 @@ export default function AddAncestor() {
                   name="timeOfDeath"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Time of Death (optional)</FormLabel>
+                      <FormLabel>{t("timeOfDeath")}</FormLabel>
                       <FormControl>
                         <Input {...field} type="time" />
                       </FormControl>
@@ -803,24 +804,24 @@ export default function AddAncestor() {
             </div>
 
             {/* Family */}
-            <Section title="Family Details">
+            <Section title={t("familyDetails")}>
               <FormField
                 control={form.control}
                 name="familySide"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Family Side</FormLabel>
+                    <FormLabel>{t("familySide")}</FormLabel>
                     <FormControl>
                       <Select
                         onValueChange={field.onChange}
                         value={field.value ?? ""}
                       >
                         <SelectTrigger>
-                          <SelectValue placeholder="Select side" />
+                          <SelectValue placeholder={t("selectSide")} />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="Maternal">Maternal</SelectItem>
-                          <SelectItem value="Paternal">Paternal</SelectItem>
+                          <SelectItem value="Maternal">{t("maternal")}</SelectItem>
+                          <SelectItem value="Paternal">{t("paternal")}</SelectItem>
                         </SelectContent>
                       </Select>
                     </FormControl>
@@ -833,7 +834,7 @@ export default function AddAncestor() {
                 name="gotram"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Gotram (optional)</FormLabel>
+                    <FormLabel>{t("gotram")}</FormLabel>
                     <FormControl>
                       <Input {...field} placeholder="e.g. Kashyapa Gotram" />
                     </FormControl>
@@ -844,13 +845,13 @@ export default function AddAncestor() {
             </Section>
 
             {/* Remembrance */}
-            <Section title="Remembrance Settings">
+            <Section title={t("remembranceSettings")}>
               <FormField
                 control={form.control}
                 name="reminderDaysBefore"
                 render={({ field }) => (
                   <FormItem className="md:col-span-2">
-                    <FormLabel>Remind me</FormLabel>
+                    <FormLabel>{t("remindMe")}</FormLabel>
                     <FormControl>
                       <Select
                         onValueChange={(v) => field.onChange(Number(v))}
@@ -901,7 +902,7 @@ export default function AddAncestor() {
                   };
                   return (
                     <FormItem className="md:col-span-2">
-                      <FormLabel>Ritual Notes</FormLabel>
+                      <FormLabel>{t("ritualNotes")}</FormLabel>
                       <div className="flex flex-wrap gap-2 mt-1">
                         {OPTIONS.map((opt) => (
                           <button
@@ -918,7 +919,7 @@ export default function AddAncestor() {
                       <Textarea
                         className="mt-2"
                         {...field}
-                        placeholder="Additional notes..."
+                        placeholder={t("additionalNotes")}
                         rows={2}
                       />
                       <FormMessage />
@@ -955,7 +956,7 @@ export default function AddAncestor() {
                   };
                   return (
                     <FormItem className="md:col-span-2">
-                      <FormLabel>Important Traditions</FormLabel>
+                      <FormLabel>{t("importantTraditions")}</FormLabel>
                       <div className="flex flex-wrap gap-2 mt-1">
                         {OPTIONS.map((opt) => (
                           <button
@@ -972,7 +973,7 @@ export default function AddAncestor() {
                       <Textarea
                         className="mt-2"
                         {...field}
-                        placeholder="Additional traditions..."
+                        placeholder={t("additionalTraditions")}
                         rows={2}
                       />
                       <FormMessage />
@@ -1015,7 +1016,7 @@ export default function AddAncestor() {
                   };
                   return (
                     <FormItem className="md:col-span-2">
-                      <FormLabel>Favorite Memories</FormLabel>
+                      <FormLabel>{t("favoriteMemories")}</FormLabel>
                       <div className="flex flex-wrap gap-2 mt-1">
                         {OPTIONS.map((opt) => (
                           <button
@@ -1032,7 +1033,7 @@ export default function AddAncestor() {
                       <Textarea
                         className="mt-2"
                         {...field}
-                        placeholder="Additional memories..."
+                        placeholder={t("additionalMemories")}
                         rows={2}
                       />
                       <FormMessage />
@@ -1073,7 +1074,7 @@ export default function AddAncestor() {
                   };
                   return (
                     <FormItem className="md:col-span-2">
-                      <FormLabel>Food Offerings / Prasadam</FormLabel>
+                      <FormLabel>{t("prasadam")}</FormLabel>
                       <div className="flex flex-wrap gap-2 mt-1">
                         {OPTIONS.map((opt) => (
                           <button
@@ -1090,7 +1091,7 @@ export default function AddAncestor() {
                       <Textarea
                         className="mt-2"
                         {...field}
-                        placeholder="Additional prasadam details..."
+                        placeholder={t("additionalPrasadam")}
                         rows={2}
                       />
                       <FormMessage />
@@ -1112,7 +1113,7 @@ export default function AddAncestor() {
                 disabled={createMutation.isPending}
                 data-testid="button-save-ancestor"
               >
-                {createMutation.isPending ? "Saving..." : "Add Ancestor"}
+                {createMutation.isPending ? t("loading") : t("addAncestor")}
               </Button>
             </div>
           </form>
