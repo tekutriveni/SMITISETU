@@ -25,6 +25,10 @@ const translations: Record<Language, Record<string, string>> = {
     loading: "లోడ్ అవుతోంది...",
     welcome: "స్వాగతం",
     changeLanguage: "భాష మార్చు",
+    familyTree: "వంశ వృక్షం",
+    memoryGallery: "జ్ఞాపకాల గ్యాలరీ",
+    notifications: "నోటిఫికేషన్లు",
+    panchangam: "పంచాంగం",
   },
   en: {
     appName: "Smriti Setu",
@@ -42,6 +46,10 @@ const translations: Record<Language, Record<string, string>> = {
     loading: "Loading...",
     welcome: "Welcome",
     changeLanguage: "Change Language",
+    familyTree: "Family Tree",
+    memoryGallery: "Memory Gallery",
+    notifications: "Notifications",
+    panchangam: "Panchangam",
   },
   hi: {
     appName: "स्मृति सेतु",
@@ -59,22 +67,25 @@ const translations: Record<Language, Record<string, string>> = {
     loading: "लोड हो रहा है...",
     welcome: "स्वागत है",
     changeLanguage: "भाषा बदलें",
+    familyTree: "परिवार वृक्ष",
+    memoryGallery: "स्मृति गैलरी",
+    notifications: "सूचनाएं",
+    panchangam: "पंचांग",
   },
 };
 
 const LanguageContext = createContext<LanguageContextType | null>(null);
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguageState] = useState<Language | null>(() => {
-    return (localStorage.getItem("app-language") as Language) || null;
-  });
+  // localStorage use చేయడం లేదు - every app open లో selection వస్తుంది
+  const [language, setLanguageState] = useState<Language | null>(null);
 
   const setLanguage = (lang: Language) => {
-    localStorage.setItem("app-language", lang);
     setLanguageState(lang);
   };
 
   const t = (key: string): string => {
+    if (!language) return key;
     return translations[language]?.[key] || translations["en"][key] || key;
   };
 
@@ -87,5 +98,6 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
 export function useLanguage() {
   const ctx = useContext(LanguageContext);
+  if (!ctx) throw new Error("useLanguage must be used inside LanguageProvider");
   return ctx;
 }

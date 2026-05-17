@@ -9,20 +9,22 @@ import { Badge } from "@/components/ui/badge";
 import { clearAuthToken } from "@/lib/auth";
 import { useGetUnreadNotificationCount } from "@workspace/api-client-react";
 import { cn } from "@/lib/utils";
-
-const navItems = [
-  { href: "/dashboard", label: "Home", icon: Home },
-  { href: "/ancestors", label: "Ancestors", icon: Users },
-  { href: "/panchangam", label: "Panchangam", icon: Calendar },
-  { href: "/notifications", label: "Notifications", icon: Bell },
-  { href: "/settings", label: "Settings", icon: Settings },
-];
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [location, setLocation] = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
   const { data: unreadData } = useGetUnreadNotificationCount();
   const unread = unreadData?.count ?? 0;
+  const { t } = useLanguage();
+
+  const navItems = [
+    { href: "/dashboard", label: t("dashboard"), icon: Home },
+    { href: "/ancestors", label: t("ancestors"), icon: Users },
+    { href: "/panchangam", label: t("panchangam"), icon: Calendar },
+    { href: "/notifications", label: t("notifications"), icon: Bell },
+    { href: "/settings", label: t("settings"), icon: Settings },
+  ];
 
   function handleLogout() {
     clearAuthToken();
@@ -31,24 +33,21 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex min-h-screen bg-background">
-      {/* Sidebar */}
       <aside className={cn(
         "fixed inset-y-0 left-0 z-50 flex flex-col w-64 bg-sidebar border-r border-sidebar-border shadow-lg",
         "transition-transform duration-300 ease-in-out",
         mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
       )}>
-        {/* Logo */}
         <div className="flex items-center gap-3 p-6 border-b border-sidebar-border">
           <div className="flex items-center justify-center w-10 h-10 rounded-full bg-primary">
             <Flame className="w-5 h-5 text-primary-foreground diya-glow" />
           </div>
           <div>
-            <h1 className="font-serif text-lg font-bold text-sidebar-foreground leading-tight">SmritiSetu</h1>
+            <h1 className="font-serif text-lg font-bold text-sidebar-foreground leading-tight">{t("appName")}</h1>
             <p className="text-xs text-muted-foreground">Ancestor Remembrance</p>
           </div>
         </div>
 
-        {/* Nav */}
         <nav className="flex-1 p-4 space-y-1">
           {navItems.map((item) => {
             const Icon = item.icon;
@@ -78,7 +77,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           })}
         </nav>
 
-        {/* Logout */}
         <div className="p-4 border-t border-sidebar-border">
           <Button
             variant="ghost"
@@ -87,12 +85,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             data-testid="button-logout"
           >
             <LogOut className="w-4 h-4 mr-3" />
-            Sign Out
+            {t("logout")}
           </Button>
         </div>
       </aside>
 
-      {/* Mobile overlay */}
       {mobileOpen && (
         <div
           className="fixed inset-0 z-40 bg-black/50 lg:hidden"
@@ -100,13 +97,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         />
       )}
 
-      {/* Main content */}
       <div className="flex-1 lg:ml-64 flex flex-col min-h-screen">
-        {/* Mobile header */}
         <header className="lg:hidden flex items-center justify-between px-4 py-3 border-b border-border bg-card sticky top-0 z-30">
           <div className="flex items-center gap-2">
             <Flame className="w-5 h-5 text-primary diya-glow" />
-            <span className="font-serif font-bold text-foreground">SmritiSetu</span>
+            <span className="font-serif font-bold text-foreground">{t("appName")}</span>
           </div>
           <Button variant="ghost" size="icon" onClick={() => setMobileOpen(!mobileOpen)}>
             {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}

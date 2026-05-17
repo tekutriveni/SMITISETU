@@ -8,13 +8,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Separator } from "@/components/ui/separator";
 import Layout from "@/components/layout";
 import { useToast } from "@/hooks/use-toast";
 import { useGetMe, getGetMeQueryKey, useUpdateProfile } from "@workspace/api-client-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { clearAuthToken } from "@/lib/auth";
 import { useLocation } from "wouter";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const schema = z.object({
   name: z.string().min(2, "Name is required"),
@@ -30,23 +30,25 @@ export default function Settings() {
   const queryClient = useQueryClient();
   const updateMutation = useUpdateProfile();
   const [, setLocation] = useLocation();
+  const { language, setLanguage, t } = useLanguage();
 
   const form = useForm<FormData>({
     resolver: zodResolver(schema),
-    defaultValues: { name: "", language: "en", photoUrl: "" },
+    defaultValues: { name: "", language: language ?? "en", photoUrl: "" },
   });
 
   useEffect(() => {
     if (me) {
       form.reset({
         name: me.name,
-        language: me.language as "en" | "te" | "hi",
+        language: (me.language as "en" | "te" | "hi") ?? language ?? "en",
         photoUrl: me.photoUrl ?? "",
       });
     }
   }, [me]);
 
   function onSubmit(data: FormData) {
+    setLanguage(data.language);
     updateMutation.mutate({ data: {
       name: data.name,
       language: data.language,
@@ -54,7 +56,7 @@ export default function Settings() {
     }}, {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: getGetMeQueryKey() });
-        toast({ title: "Profile updated", description: "Your settings have been saved." });
+        toast({ title: t("save"), description: "Your settings have been saved." });
       },
       onError: (err: any) => {
         toast({ title: "Error", description: err?.data?.error || "Failed to update", variant: "destructive" });
@@ -73,11 +75,10 @@ export default function Settings() {
     <Layout>
       <div className="max-w-2xl mx-auto space-y-8">
         <div>
-          <h1 className="font-serif text-3xl font-bold text-foreground">Settings</h1>
+          <h1 className="font-serif text-3xl font-bold text-foreground">{t("settings")}</h1>
           <p className="text-muted-foreground text-sm mt-1">Manage your profile and preferences</p>
         </div>
 
-        {/* Profile avatar */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
@@ -109,14 +110,14 @@ export default function Settings() {
 
               <FormField control={form.control} name="language" render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="flex items-center gap-2"><Globe className="w-4 h-4" /> Language</FormLabel>
+                  <FormLabel className="flex items-center gap-2"><Globe className="w-4 h-4" /> {t("changeLanguage")}</FormLabel>
                   <FormControl>
-                    <Select onValueChange={field.onChange} value={field.value}>
+                    <Select onValueChange={(val) => { field.onChange(val); setLanguage(val as "en" | "te" | "hi"); }} value={field.value}>
                       <SelectTrigger data-testid="select-language"><SelectValue /></SelectTrigger>
                       <SelectContent>
                         <SelectItem value="en">English</SelectItem>
-                        <SelectItem value="te">Telugu (తెలుగు)</SelectItem>
-                        <SelectItem value="hi">Hindi (हिंदी)</SelectItem>
+                        <SelectItem value="te">Telugu</SelectItem>
+                        <SelectItem value="hi">Hindi</SelectItem>
                       </SelectContent>
                     </Select>
                   </FormControl>
@@ -133,13 +134,12 @@ export default function Settings() {
               )} />
 
               <Button type="submit" disabled={updateMutation.isPending} data-testid="button-save-settings">
-                {updateMutation.isPending ? "Saving..." : "Save Changes"}
+                {updateMutation.isPending ? t("loading") : t("save")}
               </Button>
             </form>
           </Form>
         </motion.div>
 
-        {/* App info */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -151,9 +151,7 @@ export default function Settings() {
             <h2 className="font-serif font-semibold text-foreground">About SmritiSetu</h2>
           </div>
           <p className="text-sm text-muted-foreground leading-relaxed mb-4">
-            SmritiSetu (స్మృతి సేతు) is a sacred digital space to honor and remember your ancestors.
-            Keep their memory alive through Vardhanti reminders, Panchangam dates, ritual notes, and
-            AI-generated remembrance messages.
+            SmritiSetu is a sacred digital space to honor and remember your ancestors.
           </p>
           <div className="grid grid-cols-2 gap-3 text-xs text-muted-foreground">
             <div className="bg-muted/50 rounded-xl p-3">
@@ -167,13 +165,12 @@ export default function Settings() {
           </div>
         </motion.div>
 
-        {/* Sign out */}
         <div className="bg-destructive/5 border border-destructive/20 rounded-2xl p-6">
-          <h2 className="font-serif font-semibold text-foreground mb-2">Sign Out</h2>
+          <h2 className="font-serif font-semibold text-foreground mb-2">{t("logout")}</h2>
           <p className="text-sm text-muted-foreground mb-4">You will be signed out of your SmritiSetu account.</p>
           <Button variant="destructive" onClick={handleLogout} data-testid="button-logout-settings">
             <LogOut className="w-4 h-4 mr-2" />
-            Sign Out
+            {t("logout")}
           </Button>
         </div>
       </div>
