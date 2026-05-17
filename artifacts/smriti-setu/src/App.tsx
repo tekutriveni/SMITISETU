@@ -3,6 +3,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { isAuthenticated } from "@/lib/auth";
+import { LanguageProvider, useLanguage } from "@/contexts/LanguageContext";
+import LanguageSelection from "@/components/LanguageSelection";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/home";
 import Login from "@/pages/login";
@@ -86,14 +88,28 @@ function Router() {
   );
 }
 
+function AppContent() {
+  const { language } = useLanguage();
+
+  if (!language) {
+    return <LanguageSelection />;
+  }
+
+  return (
+    <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
+      <Router />
+      <AiAssistant />
+    </WouterRouter>
+  );
+}
+
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
-          <Router />
-          <AiAssistant />
-        </WouterRouter>
+        <LanguageProvider>
+          <AppContent />
+        </LanguageProvider>
         <Toaster />
       </TooltipProvider>
     </QueryClientProvider>
