@@ -37,7 +37,7 @@ export default function FamilyTree() {
       <div className="max-w-4xl mx-auto space-y-8">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="font-serif text-3xl font-bold text-foreground">Family Tree</h1>
+            <h1 className="font-serif text-3xl font-bold text-foreground">{t("familyTree")}</h1>
             <p className="text-muted-foreground mt-1">
               Your ancestral lineage, organized by family branch.
             </p>

@@ -21,7 +21,7 @@ export default function Reminders() {
     <Layout>
       <div className="max-w-3xl mx-auto space-y-8">
         <div>
-          <h1 className="font-serif text-3xl font-bold text-foreground">Smart Reminders</h1>
+          <h1 className="font-serif text-3xl font-bold text-foreground">{t("smartReminders")}</h1>
           <p className="text-muted-foreground mt-1">
             Stay connected with your ancestors' remembrance dates.
           </p>
@@ -31,7 +31,7 @@ export default function Reminders() {
         <section>
           <div className="flex items-center gap-2 mb-4">
             <Bell className="w-5 h-5 text-primary" />
-            <h2 className="font-serif text-xl font-semibold text-foreground">Today's Reminders</h2>
+            <h2 className="font-serif text-xl font-semibold text-foreground">{t("todayRemembrances")}</h2>
           </div>
           {todayReminders && todayReminders.length > 0 ? (
             <div className="space-y-3">
@@ -66,7 +66,7 @@ export default function Reminders() {
         <section>
           <div className="flex items-center gap-2 mb-4">
             <Calendar className="w-5 h-5 text-primary" />
-            <h2 className="font-serif text-xl font-semibold text-foreground">Upcoming (Next 90 Days)</h2>
+            <h2 className="font-serif text-xl font-semibold text-foreground">{t("upcomingNext90")}</h2>
           </div>
           {upcoming && upcoming.length > 0 ? (
             <div className="space-y-3">

@@ -42,12 +42,12 @@ export default function AiRemembrance() {
         <div className="bg-card border border-card-border rounded-2xl p-6 spiritual-glow">
           <div className="flex items-center gap-2 mb-6">
             <Sparkles className="w-5 h-5 text-primary" />
-            <h2 className="font-serif text-lg font-semibold text-foreground">Generate a Message</h2>
+            <h2 className="font-serif text-lg font-semibold text-foreground">{t("generateMessage")}</h2>
           </div>
 
           <div className="space-y-4">
             <div>
-              <label className="text-sm font-medium text-foreground mb-2 block">Select Ancestor</label>
+              <label className="text-sm font-medium text-foreground mb-2 block">{t("selectAncestor")}</label>
               {ancestors && ancestors.length > 0 ? (
                 <Select value={selectedAncestor} onValueChange={setSelectedAncestor}>
                   <SelectTrigger className="w-full">
@@ -69,7 +69,7 @@ export default function AiRemembrance() {
             </div>
 
             <div>
-              <label className="text-sm font-medium text-foreground mb-2 block">Occasion</label>
+              <label className="text-sm font-medium text-foreground mb-2 block">{t("occasion")}</label>
               <Select value={selectedOccasion} onValueChange={setSelectedOccasion}>
                 <SelectTrigger className="w-full">
                   <SelectValue />
@@ -111,7 +111,7 @@ export default function AiRemembrance() {
               <div className="bg-primary/5 border border-primary/20 rounded-2xl p-6">
                 <div className="flex items-center gap-2 mb-3">
                   <Flame className="w-4 h-4 text-primary" />
-                  <h3 className="font-serif font-semibold text-foreground">Remembrance Message</h3>
+                  <h3 className="font-serif font-semibold text-foreground">{t("remembranceMessage")}</h3>
                 </div>
                 <p className="font-serif text-foreground/90 leading-relaxed italic">"{result.message}"</p>
                 {result.language && (
