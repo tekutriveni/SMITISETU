@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { User, Globe, Camera, LogOut, Flame } from "lucide-react";
+import { User, Globe, Camera, LogOut, Flame, Bell, BellOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -15,6 +15,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { clearAuthToken } from "@/lib/auth";
 import { useLocation } from "wouter";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { usePushNotifications } from "@/hooks/usePushNotifications";
 
 const schema = z.object({
   name: z.string().min(2, "Name is required"),
@@ -31,6 +32,7 @@ export default function Settings() {
   const updateMutation = useUpdateProfile();
   const [, setLocation] = useLocation();
   const { language, setLanguage, t } = useLanguage();
+  const { permission, isSubscribed, isLoading: pushLoading, subscribe, unsubscribe } = usePushNotifications();
 
   const form = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -138,6 +140,47 @@ export default function Settings() {
               </Button>
             </form>
           </Form>
+        </motion.div>
+
+        {/* Push Notifications */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="bg-card border border-card-border rounded-2xl p-6"
+        >
+          <div className="flex items-center gap-2 mb-2">
+            <Bell className="w-5 h-5 text-primary" />
+            <h2 className="font-serif font-semibold text-foreground">Push Notifications</h2>
+          </div>
+          <p className="text-sm text-muted-foreground mb-4">
+            Get notified 30 days, 15 days, 7 days, and 1 day before each ancestor's Vardhanti — even when the app is closed.
+          </p>
+          {permission === "denied" ? (
+            <div className="text-sm text-destructive bg-destructive/10 rounded-xl p-3">
+              Notifications are blocked. Please enable them in your browser settings.
+            </div>
+          ) : (
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-foreground">
+                  {isSubscribed ? "✅ Notifications enabled" : "🔔 Enable notifications"}
+                </p>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  {isSubscribed ? "You will receive reminders automatically" : "Tap to allow push notifications"}
+                </p>
+              </div>
+              <Button
+                variant={isSubscribed ? "outline" : "default"}
+                size="sm"
+                disabled={pushLoading}
+                onClick={isSubscribed ? unsubscribe : subscribe}
+                className="flex items-center gap-2"
+              >
+                {isSubscribed ? <BellOff className="w-4 h-4" /> : <Bell className="w-4 h-4" />}
+                {pushLoading ? "..." : isSubscribed ? "Disable" : "Enable"}
+              </Button>
+            </div>
+          )}
         </motion.div>
 
         <motion.div
