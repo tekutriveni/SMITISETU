@@ -36,7 +36,7 @@ function TreeNode({ ancestor, index }: { ancestor: any; index: number }) {
   );
 }
 
-function BranchTree({ branch, members, color }: { branch: string; members: any[]; color: string }) {
+function BranchTree({ branch, members, color }: { branch: string; members: any[]; color: string; }) {
   return (
     <div className="flex flex-col items-center">
       {/* Root Node */}
@@ -46,7 +46,7 @@ function BranchTree({ branch, members, color }: { branch: string; members: any[]
         className={`flex items-center gap-2 px-5 py-3 rounded-2xl border-2 shadow-md ${color}`}
       >
         <TreePine className="w-4 h-4" />
-        <span className="font-serif font-bold text-sm">{branch} Branch</span>
+        <span className="font-serif font-bold text-sm">{branch}</span>
         <span className="text-xs opacity-70">({members.length})</span>
       </motion.div>
 
@@ -146,7 +146,7 @@ export default function FamilyTree() {
               {grouped.Paternal.length > 0 && (
                 <div className="flex-1 overflow-x-auto pb-4">
                   <BranchTree
-                    branch="Paternal"
+                    branch={t("paternalBranch")}
                     members={grouped.Paternal}
                     color="bg-amber-100 border-amber-400 text-amber-900"
                   />
@@ -160,7 +160,7 @@ export default function FamilyTree() {
               {grouped.Maternal.length > 0 && (
                 <div className="flex-1 overflow-x-auto pb-4">
                   <BranchTree
-                    branch="Maternal"
+                    branch={t("maternalBranch")}
                     members={grouped.Maternal}
                     color="bg-rose-50 border-rose-300 text-rose-900"
                   />
@@ -171,7 +171,7 @@ export default function FamilyTree() {
             {/* Other branch */}
             {grouped.Other.length > 0 && (
               <BranchTree
-                branch="Other"
+                branch={t("otherBranch") || "Other"}
                 members={grouped.Other}
                 color="bg-stone-100 border-stone-300 text-stone-800"
               />
@@ -181,7 +181,7 @@ export default function FamilyTree() {
             <div className="text-center pt-4">
               <Link href="/ancestors">
                 <Button variant="outline">
-                  View All Ancestors <ChevronRight className="w-4 h-4 ml-1" />
+                  {t("viewAllAncestors")} <ChevronRight className="w-4 h-4 ml-1" />
                 </Button>
               </Link>
             </div>
