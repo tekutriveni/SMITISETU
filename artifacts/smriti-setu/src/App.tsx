@@ -22,6 +22,8 @@ import FamilyTree from "@/pages/family-tree";
 import AiRemembrance from "@/pages/ai-remembrance";
 import MemoryGallery from "@/pages/memory-gallery";
 import SpiritualQuotes from "@/pages/spiritual-quotes";
+import AdminLogin from "@/pages/admin/login";
+import AdminDashboard from "@/pages/admin/dashboard";
 import AiAssistant from "@/components/ai-assistant";
 
 const queryClient = new QueryClient({
@@ -83,6 +85,8 @@ function Router() {
         <ProtectedRoute component={MemoryGallery} />
       </Route>
       <Route path="/spiritual-quotes" component={SpiritualQuotes} />
+      <Route path="/admin/dashboard" component={AdminDashboard} />
+      <Route path="/admin" component={AdminLogin} />
       <Route component={NotFound} />
     </Switch>
   );

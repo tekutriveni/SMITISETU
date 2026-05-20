@@ -10,6 +10,7 @@ import dashboardRouter from "./dashboard";
 import aiRouter from "./ai";
 import geminiRouter from "./gemini";
 import pushRouter from "./push";
+import adminRouter from "./admin";
 
 const router: IRouter = Router();
 
@@ -24,5 +25,6 @@ router.use(dashboardRouter);
 router.use(aiRouter);
 router.use(geminiRouter);
 router.use(pushRouter);
+router.use(adminRouter);
 
 export default router;
