@@ -1,6 +1,6 @@
 import { useRoute, useLocation } from "wouter";
 import { motion } from "framer-motion";
-import { ArrowLeft, Edit, Trash2, Flame, Calendar, Star, BookOpen, Heart } from "lucide-react";
+import { ArrowLeft, Edit, Trash2, Flame, Calendar, Star, BookOpen, Heart, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -231,9 +231,22 @@ export default function AncestorDetail() {
           </div>
 
           {generatedMessage && (
-            <div className="bg-background/60 border border-border rounded-xl p-4 mb-4">
+            <div className="bg-background/60 border border-border rounded-xl p-4 mb-3">
               <p className="font-serif text-sm italic text-foreground/90 leading-relaxed">{generatedMessage}</p>
             </div>
+          )}
+          {generatedMessage && (
+            <button
+              onClick={() => {
+                const text = encodeURIComponent(`🪔 *${ancestor.fullName}* స్మరణ\n\n"${generatedMessage}"\n\n— SmritiSetu App ద్వారా`);
+                window.open(`https://wa.me/?text=${text}`, "_blank");
+              }}
+              className="mb-4 flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-white w-full justify-center transition-all hover:opacity-90 active:scale-95"
+              style={{ background: "#25D366" }}
+            >
+              <Share2 className="w-4 h-4" />
+              WhatsApp లో Share చేయండి
+            </button>
           )}
 
           {ritualSuggestions && (

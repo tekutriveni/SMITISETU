@@ -445,7 +445,13 @@ export default function AddAncestor() {
                     <FormLabel>{t("relationship")}</FormLabel>
                     <FormControl>
                       <Select
-                        onValueChange={field.onChange}
+                        onValueChange={(val) => {
+                          field.onChange(val);
+                          const maleRels = ["Grandfather", "Father", "Uncle", "Brother"];
+                          const femaleRels = ["Grandmother", "Mother", "Aunt", "Sister"];
+                          if (maleRels.includes(val)) form.setValue("gender", "Male");
+                          else if (femaleRels.includes(val)) form.setValue("gender", "Female");
+                        }}
                         defaultValue={field.value}
                       >
                         <SelectTrigger data-testid="select-relationship">

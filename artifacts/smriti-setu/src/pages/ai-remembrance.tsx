@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Star, Sparkles, Flame } from "lucide-react";
+import { Star, Sparkles, Flame, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import Layout from "@/components/layout";
@@ -117,6 +117,20 @@ export default function AiRemembrance() {
                 {result.language && (
                   <p className="text-xs text-muted-foreground mt-3">Language: {result.language}</p>
                 )}
+                {/* WhatsApp Share Button */}
+                <button
+                  onClick={() => {
+                    const text = encodeURIComponent(
+                      `🪔 SmritiSetu — Remembrance Message\n\n"${result.message}"\n\n— Shared via SmritiSetu App`
+                    );
+                    window.open(`https://wa.me/?text=${text}`, "_blank");
+                  }}
+                  className="mt-4 flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium text-white transition-all hover:opacity-90 active:scale-95"
+                  style={{ background: "#25D366" }}
+                >
+                  <Share2 className="w-4 h-4" />
+                  WhatsApp లో Share చేయండి
+                </button>
               </div>
             )}
           </motion.div>
