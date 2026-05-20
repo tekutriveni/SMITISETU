@@ -479,7 +479,7 @@ export default function AddAncestor() {
                     <FormControl>
                       <Select
                         onValueChange={field.onChange}
-                        defaultValue={field.value}
+                        value={field.value}
                       >
                         <SelectTrigger>
                           <SelectValue />
