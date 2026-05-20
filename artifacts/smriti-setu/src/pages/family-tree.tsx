@@ -112,7 +112,7 @@ export default function FamilyTree() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="font-serif text-3xl font-bold text-foreground">{t("familyTree")}</h1>
-            <p className="text-muted-foreground mt-1">మీ వంశ వృక్షం — పితృ & మాతృ శాఖలు</p>
+            <p className="text-muted-foreground mt-1">{t("familyTreeSubtitle")}</p>
           </div>
           <Link href="/ancestors/new">
             <Button className="flex items-center gap-2">
